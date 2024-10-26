@@ -12,12 +12,9 @@ class EdgeTTS():
         self.voice = voice
         self.pitch = pitch
 
-        self.audio_file = "tts_audio.mp3"
-        pass
-
-    def generate_audio(self, text):
-
-        file_name = f'./web/audio/{self.audio_file}'
+    def generate_audio(self, text, file):
+        
+        file_name = f'./web/audio/{file}'
 
         self.remove(file_name)
 

@@ -30,13 +30,19 @@ from scripts.PorjectBlesser import blessing
 import uvicorn
 import argparse
 import yaml
+import time
+
 import asyncio
 
 class web_app():
     def __init__(self, path=r'.\config.yaml'):
         self.load_cfg(path)
+        if self.args.bless:
+            blessing()
+        system = open('./prompts/' + self.args.prompts, 'r', encoding='utf-8').read()
         self.app = FastAPI()
         self.router = APIRouter()
+        self.file = "tts_audio1.mp3"
 
         # connect to index.html
         self.set_routes()
@@ -46,12 +52,15 @@ class web_app():
 
         self.app.include_router(self.router)
 
-        self.llm = self.init_llm(self.args.llm_url, self.args.api_key, self.args.model, self.args.organization_id, self.args.project_id)
-        self.tts = self.init_tts(self.args.tts_mode, self.args.edge)
+        self.llm = self.init_llm(self.args.llm_url, self.args.api_key, self.args.model, self.args.organization_id, self.args.project_id, system)
+        tts_config = self.args.tts
+        self.tts = self.init_tts(self.args.tts_mode, tts_config.get(self.args.tts_mode, {}))
 
-    def init_llm(self, llm_url, api_key, model, org_id, pro_id, system='You are a sarcastic and sexy AI chatbot who loves to the jokes "Get out and touch some grass"') -> llm_interface:
+        self.callback('啟動了耶~')
+
+    def init_llm(self, llm_url, api_key, model, org_id, pro_id, system) -> llm_interface:
         self.callback(f"connect to llm llm_url:{llm_url}")
-        self.callback(f"api_key:{api_key}, model:{model}")
+        # self.callback(f"api_key:{api_key}, model:{model}")
         return llm_api(
         llm_url=llm_url,
         model=model,
@@ -68,27 +77,35 @@ class web_app():
         @self.app.websocket("/llm-ws")    
         async def websocket_handler(websocket: WebSocket,): # 不能使用 self
             await websocket.accept()
-            print("[DeBug] [WebSocket] | WebSocket connection established")
+            self.callback("WebSocket connection established")
             
             # 持續接收客戶端消息
             while True:
                 try:
+                    start = time.time()
                     text = ''
                     data = await websocket.receive_text()
-                    print(f"[DeBug] [WebSocket] | Received: {data} send to llm...")
+                    self.callback(f"Received: {data} send to llm...")
                     res = self.llm.chat_iter(str(data))
                     
                     for chunk in res:
                         if chunk:
                             text += chunk
+                    self.callback(f"Response: {text}")
 
-                    self.tts.generate_audio(str(text))
+                    self.tts.generate_audio(str(text), self.file)
 
-                    await websocket.send_text(f"Audio file: ./audio/tts_audio.mp3")
-
-                    print(f"[DeBug] [WebSocket] | Response: {text}")
-
+                    await websocket.send_text(f"Audio file: ./audio/{self.file}")
                     await websocket.send_text(f"Message res: {text}")
+
+                    if self.file == "tts_audio1.mp3":
+                        self.file = "tts_audio2.mp3"
+                    else:
+                        self.file = "tts_audio1.mp3"
+
+                    self.callback(f'LLM and TTS latency: {(time.time()-start):.4f}s')
+                    self.callback(f'llm model: {self.args.model}')
+                    self.callback(f'tts mode: {self.args.tts_mode}')
                 except Exception as e:
                     print(f"[DeBug] [WebSocket] | WebSocket error: {e}")
                     break
@@ -108,6 +125,3 @@ class web_app():
 if __name__ == "__main__":
     run = web_app()
     run.start_server()
-
-    if run.args.bless:
-        blessing()

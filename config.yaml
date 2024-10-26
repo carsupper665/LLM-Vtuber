@@ -1,19 +1,31 @@
 # ======================== Server ========================
 port: 52696
-#  ============== LLM Backend Settings ===================
-# LLM_URL: "http://localhost:11434/v1/"
+# ===================== LLM Settings =====================
+# llm_url: "http://localhost:11434/v1/"
+llm_mode: "openai"
 llm_url: "http://localhost:11434/"
-api_key: "key"
-organization_id: "org id"
-project_id: "proj id"
-model: "llama3:latest" 
+api_key: "api key"
+organization_id: "org"
+project_id:  "proj"
+model: "llama3-zh-inst"
+prompts: "test.txt"
+
+revGPT:
+  prompts:
 # ===================== TTS Settings ====================== 
-tts_mode: "edgeTTS"
-edge:
-  voice: "en-US-EmmaNeural"
-  pitch: "+10Hz"
- 
-bless: False
+tts_mode: "vitsTTS" #visTTS, edgeTTS
+
+tts:
+  edgeTTS:
+    voice: "zh-TW-HsiaoYuNeural"
+    pitch: "+10Hz"
+
+  vitsTTS:
+    model_path: "./tts/models/paimon6k_390k.pth"
+    config_path: "./tts/models/paimon6k.json"
+    speed: 1
+
+bless: True
 
 # 如果要新cfg按照這個格式
 # 新的種類:
