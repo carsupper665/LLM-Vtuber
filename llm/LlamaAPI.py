@@ -25,7 +25,7 @@
 
 from typing import Iterator
 import json
-import openai
+import os
 from openai import OpenAI
 from .Interface import llm_interface
 
@@ -91,13 +91,20 @@ class llm_api(llm_interface):
         system: str
             the system prompt
         """
-        self.system = system
-        self.memory.append(
-            {
-                "role": "system",
-                "content": system,
-            }
-        )
+        if not os.path.exists('mem.json'):
+            self.system = system
+            self.memory.append(
+                {
+                    "role": "system",
+                    "content": system,
+                }
+            )
+            self.callback(f'memory creat')
+        else:
+            with open('mem.json', 'r') as file:
+                self.memory = json.load(file)
+            self.system = self.memory
+            self.callback(f'memory read')
 
     def chat_iter(self, prompt: str) -> Iterator[str]:
 
@@ -151,7 +158,6 @@ class llm_api(llm_interface):
         except Exception as e:
             print()
             self.callback(f"Error saving memory to {fn}: {str(e)}")
-
 
     def handle_interrupt(self, heard_response: str) -> None:
         """

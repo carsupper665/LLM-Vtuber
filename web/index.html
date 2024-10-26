@@ -9,6 +9,7 @@
     <h1>WebSocket Client</h1>
     <audio id="audioPlayer" controls></audio>
     <p >Send Message To AI Vtuber</p>
+    <input id="input" type="text">
     <button id="sendButton">Send Message</button>
     <p id="response"></p>
 
@@ -31,7 +32,9 @@
         };
 
         document.getElementById("sendButton").onclick = function() {
-            ws.send("你欠打");
+            var inputValue = document.getElementById('input').value;
+            document.getElementById('input').value = '';
+            ws.send(inputValue);
         };
     </script>
 </body>
