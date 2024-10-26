@@ -35,7 +35,6 @@ class llm_api(llm_interface):
         llm_url: str,
         model: str,
         system: str,
-        # callback = print, # [DeBug] [LlmAPI] | 
         org: str = "None",
         project: str = "None",
         api_key: str = "None",):
