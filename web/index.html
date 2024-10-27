@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vtuber web ui</title>
+</head>
+<body>
+    <h1>WebSocket Client</h1>
+    <audio id="audioPlayer" controls></audio>
+    <p >Send Message To AI Vtuber</p>
+    <input id="input" type="text">
+    <button id="sendButton">Send Message</button>
+    <p id="response"></p>
+
+    <script type="text/javascript">
+        
+        var ws = new WebSocket("/llm-ws");
+
+        ws.onopen = function(event) {
+            console.log("Connected to WebSocket server.");
+        };
+
+        ws.onmessage = function(event) {
+            document.getElementById("response").innerText = event.data;
+
+            if (event.data.startsWith("Audio file: ")) {
+                var audioFilePath = event.data.replace("Audio file: ", "");
+                document.getElementById("audioPlayer").src = audioFilePath;
+                document.getElementById("audioPlayer").play();
+            }
+        };
+
+        document.getElementById("sendButton").onclick = function() {
+            var inputValue = document.getElementById('input').value;
+            document.getElementById('input').value = '';
+            ws.send(inputValue);
+        };
+    </script>
+</body>
+</html>

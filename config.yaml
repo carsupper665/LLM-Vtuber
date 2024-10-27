@@ -1,0 +1,34 @@
+# ======================== Server ========================
+port: 52696
+# ===================== LLM Settings =====================
+# llm_url: "http://localhost:11434/v1/"
+llm_mode: "openai"
+llm_url: "http://localhost:11434/"
+api_key: "api_jey"
+organization_id: "id"
+project_id:  "id"
+model: "llama3-zh-inst" # "llama3-zh-inst" "llama3:latest"  "gpt-4o"
+prompts: "test.txt"
+
+revGPT:
+  prompts:
+# ===================== TTS Settings ====================== 
+tts_mode: "vitsTTS" #visTTS, edgeTTS
+
+tts:
+  edgeTTS:
+    voice: "en-US-EmmaMultilingualNeural" # "en-US-EmmaMultilingualNeural" "zh-TW-HsiaoYuNeural"
+    pitch: "+10Hz"
+
+  vitsTTS:
+    model_path: "./tts/models/paimon6k_390k.pth"
+    config_path: "./tts/models/paimon6k.json"
+    speed: 1
+
+bless: True
+
+# 如果要新cfg按照這個格式
+# 新的種類:
+#   新的設定: "新的值"
+#   新的設定2: "新的值"
+# 阿如果只有一個就不用了
