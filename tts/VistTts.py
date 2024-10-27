@@ -14,7 +14,7 @@ from .src.text.symbols import symbols
 from .src.text import text_to_sequence
 
 
-class VistTTS:
+class VitsTTS:
     def __init__(self, model_path, config_path, speed) -> None:
         self.callback('VistTTS init...')
         self.speed = speed
