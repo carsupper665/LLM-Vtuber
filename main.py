@@ -26,6 +26,7 @@ from fastapi.staticfiles import StaticFiles
 from llm.Interface import llm_interface
 from llm.LlamaAPI import llm_api
 from tts.tts import tts
+from stt.stt import stt
 from scripts.PorjectBlesser import blessing
 import uvicorn
 import argparse
@@ -54,6 +55,9 @@ class web_app():
 
         self.llm = self.init_llm(self.args.llm_url, self.args.api_key, self.args.model, self.args.organization_id, self.args.project_id, system)
         tts_config = self.args.tts
+        stt_config = self.args.stt
+        
+        self.stt = self.init_stt(self.args.stt_mode, stt_config)
         self.tts = self.init_tts(self.args.tts_mode, tts_config.get(self.args.tts_mode, {}))
 
         self.callback('啟動了耶~')
@@ -72,6 +76,10 @@ class web_app():
     def init_tts(self, tts_type, config):
         self.callback(f'TTS type: {tts_type}. Config: {config}')
         return tts.init(tts_type=tts_type, **config)
+    
+    def init_stt(self, stt_type, config):
+        self.callback(f'STT type: {stt_type}. Config: {config}')
+        return stt.init(stt_type=stt_type, **config)
 
     def set_routes(self):
         @self.app.websocket("/llm-ws")    
@@ -84,9 +92,12 @@ class web_app():
                 try:
                     text = ''
                     data = await websocket.receive_text()
-                    self.callback(f"Received: {data} send to llm...")
+                    # self.callback(f"Received: {data} send to llm...")
+                    t = self.stt.recognize()
+                    self.callback(f"User input:{t}")
                     start = time.time()
-                    res = self.llm.chat_iter(str(data))
+                    # res = self.llm.chat_iter(str(data))
+                    res = self.llm.chat_iter(str(t))
 
                     text = res
                     

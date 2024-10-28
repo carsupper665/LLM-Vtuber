@@ -4,10 +4,10 @@ port: 52696
 # llm_url: "http://localhost:11434/v1/"
 llm_mode: "openai"
 llm_url: "http://localhost:11434/"
-api_key: "api_jey"
-organization_id: "id"
-project_id:  "id"
-model: "llama3:latest" # "llama3-zh-inst" "llama3:latest"  "gpt-4o"
+api_key: "key"
+organization_id: "org-id"
+project_id:  "proj_id"
+model: "llama3-zh-inst" # "llama3-zh-inst" "llama3:latest"  "gpt-4o" "gpt-4o-mini"
 prompts: "test.txt"
 
 revGPT:
@@ -24,6 +24,12 @@ tts:
     model_path: "./tts/models/paimon6k_390k.pth"
     config_path: "./tts/models/paimon6k.json"
     speed: 1
+
+# ===================== STT Settings ====================== 
+stt_mode: "sr"
+stt:
+  sr:
+    language: "zh-CN"
 
 bless: True
 

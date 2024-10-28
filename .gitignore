@@ -1,9 +1,8 @@
-# 忽略 Python 編譯文件
+venv/
 __pycache__/
 *.pyc
-
-# 忽略音頻檔案
 web/audio/*.mp3
 web/audiotts_*.mp3
 tts/models/*.pth
 tts/models/*.json
+mem.json
