@@ -7,10 +7,13 @@ llm_url: "http://localhost:11434/"
 api_key: "key"
 organization_id: "org-id"
 project_id:  "proj_id"
-model: "llama3-zh-inst" # "llama3-zh-inst" "llama3:latest"  "gpt-4o" "gpt-4o-mini"
+model: "llama3-zh-inst" # "llama3-zh-inst" "llama3:latest"  "gpt-4o" "gpt-4o-mini" "gpt-4"
 prompts: "test.txt"
 
 revGPT:
+  prompts:
+
+memGPT:
   prompts:
 # ===================== TTS Settings ====================== 
 tts_mode: "vitsTTS" #visTTS, edgeTTS
@@ -21,15 +24,21 @@ tts:
     pitch: "+10Hz"
 
   vitsTTS:
-    model_path: "./tts/models/paimon6k_390k.pth"
-    config_path: "./tts/models/paimon6k.json"
+    model_path: "paimon6k_390k.pth"
+    config_path: "paimon6k.json"
     speed: 1
+    sentiment: True
+    sentiment_model_path: "paimon_sentiment.onnx"
 
 # ===================== STT Settings ====================== 
 stt_mode: "sr"
+
 stt:
   sr:
     language: "zh-CN"
+    
+  ASR:
+    model_path: "model.onnx"
 
 bless: True
 

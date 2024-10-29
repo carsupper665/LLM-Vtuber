@@ -83,7 +83,7 @@ class web_app():
 
     def set_routes(self):
         @self.app.websocket("/llm-ws")    
-        async def websocket_handler(websocket: WebSocket,): # 不能使用 self
+        async def websocket_handler(websocket: WebSocket,):
             await websocket.accept()
             self.callback("WebSocket connection established")
             
@@ -140,3 +140,10 @@ class web_app():
 if __name__ == "__main__":
     run = web_app()
     run.start_server()
+    # Vtts = tts.init('vitsTTS',
+    #     model_path=r".\tts\models\paimon6k_390k.pth",
+    #     config_path=r".\tts\models\paimon6k.json",
+    #     speed=1,
+    #     ifsentiment=True,
+    #     sentiment_path="paimon_sentiment.onnx")
+    # Vtts.generate_audio("你不能這樣說我，打你", "test.mp3")
