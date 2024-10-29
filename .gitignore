@@ -2,7 +2,9 @@ venv/
 __pycache__/
 *.pyc
 web/audio/*.mp3
+web/audio/*.wav
 web/audiotts_*.mp3
 tts/models/*.pth
+tts/se_models/*.onnx
 tts/models/*.json
 mem.json
