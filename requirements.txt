@@ -13,4 +13,14 @@ Cython==3.0.11
 matplotlib
 scipy
 librosa==0.10.2
-
+onnxruntime
+numpy
+SpeechRecognition
+transformers
+torch
+monotonic_align
+pypinyin
+jieba
+cn2an
+uvicorn[standard]
+pyaudio
