@@ -7,4 +7,4 @@ web/audiotts_*.mp3
 tts/models/*.pth
 tts/se_models/*.onnx
 tts/models/*.json
-mem.json
+./mem.json
