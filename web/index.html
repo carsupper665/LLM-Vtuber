@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>vtuber web ui</title>
+    <script src="src/live2dcubismcore.min.js"></script>
+    <script src="src/live2d.min.js"></script>
+    <script src="src/pixi.min.js"></script>
+    <script src="src/index.min.js"></script>
 </head>
 <body>
     <h1>WebSocket Client</h1>
@@ -13,8 +17,60 @@
     <button id="sendButton">Send Message</button>
     <p id="response"></p>
 
+    <canvas id="canvas" width="500" height="500"></canvas>
+
     <script type="text/javascript">
-        
+        const app = new PIXI.Application({
+        view: document.getElementById("canvas"),
+        autoStart: true,
+        resizeTo: window,
+        transparent: true,
+        backgroundAlpha: 0
+        });
+        async function loadLive2DModel() {
+            console.log("Loaded Live2D model.");
+            const modelUrl = "./live2d/huohuo/huohuo.model3.json"; // 修改為 Live2D 模型的 JSON 路徑
+            const model = await PIXI.live2d.Live2DModel.from(modelUrl);
+
+            model.scale.set(0.1); // 設置模型的縮放
+            model.position.set(app.view.width / 2, app.view.height / 2); // 設置模型的初始位置
+            model.anchor.set(0.5, 0.5);
+
+            app.stage.addChild(model);
+            makeDraggable(model);
+        }
+
+        loadLive2DModel();
+        function makeDraggable(model) {
+            model.interactive = true;
+            model.buttonMode = true;
+
+            model.on('pointerdown', onDragStart)
+                .on('pointerup', onDragEnd)
+                .on('pointerupoutside', onDragEnd)
+                .on('pointermove', onDragMove);
+
+            function onDragStart(event) {
+                this.data = event.data;
+                this.dragging = true;
+            }
+
+            function onDragEnd() {
+                this.dragging = false;
+                this.data = null;
+            }
+
+            function onDragMove() {
+                if (this.dragging) {
+                    const newPosition = this.data.getLocalPosition(this.parent);
+                    this.position.set(newPosition.x, newPosition.y);
+                }
+            }
+        }
+
+        // 使用 PixiJS v7，設定 `renderer.events` 而不是 `renderer.plugins.interaction`
+        const interaction = app.renderer.events;
+
         var ws = new WebSocket("/llm-ws");
 
         ws.onopen = function(event) {
