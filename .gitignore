@@ -8,3 +8,4 @@ tts/models/*.pth
 tts/se_models/*.onnx
 tts/models/*.json
 ./mem.json
+stt/resources/models/*
