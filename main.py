@@ -57,7 +57,7 @@ class web_app():
         tts_config = self.args.tts
         stt_config = self.args.stt
         
-        self.stt = self.init_stt(self.args.stt_mode, stt_config)
+        self.stt = self.init_stt(self.args.stt_mode, stt_config.get(self.args.stt_mode, {}))
         self.tts = self.init_tts(self.args.tts_mode, tts_config.get(self.args.tts_mode, {}))
 
         self.callback('啟動了耶~')
@@ -74,11 +74,11 @@ class web_app():
         system=system )
     
     def init_tts(self, tts_type, config):
-        self.callback(f'TTS type: {tts_type}. Config: {config}')
+        self.callback(f'TTS type: {tts_type} . Config: {config}')
         return tts.init(tts_type=tts_type, **config)
     
     def init_stt(self, stt_type, config):
-        self.callback(f'STT type: {stt_type}. Config: {config}')
+        self.callback(f'STT type: {stt_type} . Config: {config}')
         return stt.init(stt_type=stt_type, **config)
 
     def set_routes(self):
@@ -90,6 +90,7 @@ class web_app():
             # 持續接收客戶端消息
             while True:
                 try:
+                    
                     text = ''
                     data = await websocket.receive_text()
                     # self.callback(f"Received: {data} send to llm...")
@@ -132,7 +133,7 @@ class web_app():
         self.callback("config loaded")
 
     def callback(self, msg):
-        print(f'[DeBug] [WebSocket] | {msg}')
+        print(f'[DeBug] [main] | {msg}')
 
     def start_server(self):
         uvicorn.run(self.app, host="127.0.0.1", port=self.args.port)

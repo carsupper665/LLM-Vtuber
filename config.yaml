@@ -7,7 +7,8 @@ llm_url: "http://localhost:11434/"
 api_key: "key"
 organization_id: "org-id"
 project_id:  "proj_id"
-model: "llama3-zh-inst" # "llama3-zh-inst" "llama3:latest"  "gpt-4o" "gpt-4o-mini" "gpt-4"
+
+model: "gpt-4o" # "llama3-zh-inst" "llama3:latest"  "gpt-4o" "gpt-4o-mini" "gpt-4"
 prompts: "test.txt"
 
 revGPT:
@@ -31,16 +32,16 @@ tts:
     sentiment_model_path: "paimon_sentiment.onnx"
 
 # ===================== STT Settings ====================== 
-stt_mode: "sr"
+stt_mode: "ASR"
 
 stt:
   sr:
     language: "zh-CN"
     
   ASR:
-    model_path: "model.onnx"
+    config_path: "stt/resources/config.yaml"
 
-bless: True
+bless: False
 
 # 如果要新cfg按照這個格式
 # 新的種類:

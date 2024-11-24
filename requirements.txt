@@ -24,3 +24,4 @@ jieba
 cn2an
 uvicorn[standard]
 pyaudio
+typeguard==2.13.3
